@@ -25,7 +25,7 @@ public class ShopownerController {
 	}
 	
 	//get shopowne by id
-	@GetMapping("/getShopOwne/{id}")
+	@GetMapping("/getShopOwner/{id}")
 	public Shopowner getShopownerById(@PathVariable("id") int id) {
 		return shopownerRepo.findById(id).get();
 	}

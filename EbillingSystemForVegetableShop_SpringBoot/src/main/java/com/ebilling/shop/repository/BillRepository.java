@@ -4,16 +4,13 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.ebilling.shop.entity.Bill;
+import com.ebilling.shop.entity.Bill_Order;
+public interface BillRepository extends JpaRepository<Bill_Order, Integer> {
 
-public interface BillRepository extends JpaRepository<Bill, Integer> {
+	List<Bill_Order> findAllById(int id);
 
-	List<Bill> findAllById(int id);
 
-	List<Bill> findByShopIdAndCustoId();
+	List<Bill_Order> findByCustomerId(int id);
 
-	List<Bill> findByCustomerId(int id);
-
-	List<Bill> findAllByShopId(int id);
 
 }

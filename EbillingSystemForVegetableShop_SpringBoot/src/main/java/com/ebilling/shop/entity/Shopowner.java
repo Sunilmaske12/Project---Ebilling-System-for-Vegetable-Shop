@@ -2,6 +2,8 @@ package com.ebilling.shop.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -26,13 +28,12 @@ public class Shopowner {
 	private String address;
 	
 	@OneToMany(mappedBy = "shopowner")
+	@JsonManagedReference
 	private List<Customer> customer;
 	
 	@OneToMany(mappedBy = "shopowner")
+	@JsonManagedReference
 	private List<Product> product;
-
-	@OneToMany(mappedBy = "shopowner")
-	private List<Bill> bill;
 
 	public int getId() {
 		return id;
@@ -98,14 +99,10 @@ public class Shopowner {
 		this.product = product;
 	}
 
-	public List<Bill> getBill() {
-		return bill;
-	}
 
-	public void setBill(List<Bill> bill) {
-		this.bill = bill;
+	@Override
+	public String toString() {
+		return "Shopowner [id=" + id + ", name=" + name + ", mobNo=" + mobNo + ", email=" + email + ", password="
+				+ password + ", address=" + address + ", customer=" + customer + ", product=" + product + "]";
 	}
-	
-	
-
 }

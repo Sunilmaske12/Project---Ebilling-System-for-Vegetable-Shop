@@ -1,6 +1,7 @@
 package com.ebilling.shop.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,8 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ebilling.shop.entity.Bill;
+import com.ebilling.shop.entity.Bill_Order;
+import com.ebilling.shop.entity.Customer;
+import com.ebilling.shop.entity.OrderedItem;
 import com.ebilling.shop.repository.BillRepository;
+import com.ebilling.shop.repository.CustomerRepository;
+import com.ebilling.shop.repository.OrderedItemReposotory;
 
 @RestController
 @RequestMapping("/bill")
@@ -20,40 +25,58 @@ public class BillController {
 	@Autowired
 	private BillRepository billRepo;
 	
+	@Autowired
+	private CustomerRepository customerRepo;
+	
+	@Autowired
+	private OrderedItemReposotory orderedItemRepo;
+	
 	//get all bill 
 	@GetMapping("/getAll")
-	public List<Bill> getAllBill(){
+	public List<Bill_Order> getAllBill(){
 		return billRepo.findAll();
 	}
 	
-	//get all bill for a shop
-	@GetMapping("/getOfShop/{shopId}")
-	public List<Bill> getAllBillByShop(@PathVariable("shopId") int id){
-		return billRepo.findAllByShopId(id);
-	}
 
 	//get all bill for a customer
 	@GetMapping("/getOfCustomer/{custoId}")
-	public List<Bill> getAllBillByCustomer(@PathVariable("custoId") int id){
+	public List<Bill_Order> getAllBillByCustomer(@PathVariable("custoId") int id){
 		return billRepo.findByCustomerId(id);
 	}
 
 	
-	//get all bill for a customer of a shop
-	@GetMapping("/getOfCustomer/{shopId}/{custoId}")
-	public List<Bill> getAllBillByCustomerAndShop(@PathVariable("shopId") int shopId, @PathVariable("custoId") int custoId){
-		return billRepo.findByShopIdAndCustoId();
-	}
+
 	//get a bill by id 
 	@GetMapping("/get/{id}")
-	public Bill getBillById(@PathVariable("id") int id){
+	public Bill_Order getBillById(@PathVariable("id") int id){
 		return billRepo.findById(id).get();
 	}
 	
-	//create bill
-	@PostMapping("/save")
-	public Bill saveBill(@RequestBody Bill bill) {
+	//create bill and making an order
+	@PostMapping("/save/{customerId}")
+	public Bill_Order saveBill(@RequestBody Bill_Order bill, @PathVariable("customerId") int id) {
+		long totalPrice = 0;
+		for(OrderedItem item : bill.getOrderedItem()) {
+			totalPrice+=(item.getProduct().getPrice())*(item.getQuantity());
+		}
+		bill.setTotalPrice(totalPrice);
+		Optional<Customer> optionalCustomer = customerRepo.findById(id);
+		if(!optionalCustomer.isEmpty()) {
+			bill.setCustomer(optionalCustomer.get());		
+		}
 		return billRepo.save(bill);
+	}
+	
+	//make order
+	@PostMapping("/order/save/{billId}")
+	public List<OrderedItem> makeOrder(@RequestBody List<OrderedItem> orderedItem, @PathVariable("billId") int id) {
+		Optional<Bill_Order> optionalBill = billRepo.findById(id);
+		if(!optionalBill.isEmpty()) {
+			for(OrderedItem item:orderedItem) {
+				item.setBill(optionalBill.get());
+			}				
+		}
+		return orderedItemRepo.saveAll(orderedItem);
 	}
 
 

@@ -1,10 +1,13 @@
 package com.ebilling.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class OrderedItem {
@@ -19,7 +22,8 @@ public class OrderedItem {
 	private int quantity;
 	
 	@ManyToOne
-	private Bill bill;
+	@JsonBackReference
+	private Bill_Order bill;
 
 	public int getId() {
 		return id;
@@ -45,11 +49,11 @@ public class OrderedItem {
 		this.quantity = quantity;
 	}
 
-	public Bill getBill() {
+	public Bill_Order getBill() {
 		return bill;
 	}
 
-	public void setBill(Bill bill) {
+	public void setBill(Bill_Order bill) {
 		this.bill = bill;
 	}
 	

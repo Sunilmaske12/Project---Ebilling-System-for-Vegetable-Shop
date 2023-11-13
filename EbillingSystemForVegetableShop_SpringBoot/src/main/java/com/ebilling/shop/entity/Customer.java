@@ -2,6 +2,9 @@ package com.ebilling.shop.entity;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,10 +32,12 @@ public class Customer {
 	private long amtBalance;
 		
 	@ManyToOne
+	@JsonBackReference
 	private Shopowner shopowner;
 	
 	@OneToMany(mappedBy = "customer")
-	private List<Bill> bills;
+	@JsonManagedReference
+	private List<Bill_Order> bills;
 
 	public int getId() {
 		return id;
