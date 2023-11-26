@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ebilling.shop.entity.Bill_Order;
 import com.ebilling.shop.entity.Customer;
 import com.ebilling.shop.entity.OrderedItem;
+import com.ebilling.shop.exception.ResourceNotFoundException;
 import com.ebilling.shop.repository.BillRepository;
 import com.ebilling.shop.repository.CustomerRepository;
 import com.ebilling.shop.repository.OrderedItemReposotory;
@@ -60,22 +61,26 @@ public class BillController {
 			totalPrice+=(item.getProduct().getPrice())*(item.getQuantity());
 		}
 		bill.setTotalPrice(totalPrice);
-		Optional<Customer> optionalCustomer = customerRepo.findById(id);
-		if(!optionalCustomer.isEmpty()) {
-			bill.setCustomer(optionalCustomer.get());		
+		Optional<Customer> customer = customerRepo.findById(id);
+		if(customer.isEmpty()) {
+			throw new ResourceNotFoundException("Customer is not found with id : "+id);
 		}
+		bill.setCustomer(customer.get());		
 		return billRepo.save(bill);
 	}
 	
 	//make order
 	@PostMapping("/order/save/{billId}")
 	public List<OrderedItem> makeOrder(@RequestBody List<OrderedItem> orderedItem, @PathVariable("billId") int id) {
-		Optional<Bill_Order> optionalBill = billRepo.findById(id);
-		if(!optionalBill.isEmpty()) {
-			for(OrderedItem item:orderedItem) {
-				item.setBill(optionalBill.get());
-			}				
+		Optional<Bill_Order> bill = billRepo.findById(id);
+
+		if(bill.isEmpty()) {
+				throw new ResourceNotFoundException("Bill is not found with id : "+id);
 		}
+		
+		for(OrderedItem item:orderedItem) {
+			item.setBill(bill.get());
+		}				
 		return orderedItemRepo.saveAll(orderedItem);
 	}
 

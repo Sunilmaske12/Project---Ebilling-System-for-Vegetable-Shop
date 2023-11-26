@@ -20,7 +20,7 @@ public class Product {
 	
 	private int price;
 	
-	private String imageUrl;
+	private String imageName;
 	
 	@ManyToOne
 	@JsonBackReference
@@ -51,12 +51,12 @@ public class Product {
 		this.price = price;
 	}
 
-	public String getImageUrl() {
-		return imageUrl;
+	public String getImageName() {
+		return imageName;
 	}
 
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
 	}
 
 	public Shopowner getShopowner() {
