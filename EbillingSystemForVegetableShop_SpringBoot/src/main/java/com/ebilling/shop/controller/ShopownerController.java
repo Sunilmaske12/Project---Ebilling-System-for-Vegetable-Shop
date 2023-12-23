@@ -24,6 +24,8 @@ public class ShopownerController {
 	@Autowired
 	private ShopOwnerRepository shopownerRepo;
 	
+	//testing
+	
 	//get all shopowner
 	@GetMapping("/getAllShopowner")
 	public List<Shopowner> getAllShopOwner(){
