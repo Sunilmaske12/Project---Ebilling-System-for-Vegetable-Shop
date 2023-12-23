@@ -1,6 +1,7 @@
 package com.ebilling.shop.entity;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -33,7 +34,8 @@ public class Bill_Order {
 	
 	private long amtPaid;
 	
-	private Date date;
+	private String date =LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+
 
 	public int getId() {
 		return id;
@@ -76,14 +78,11 @@ public class Bill_Order {
 		this.amtPaid = amtPaid;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
-	}
-	
+
 	
 	
 

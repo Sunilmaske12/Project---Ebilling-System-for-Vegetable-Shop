@@ -15,10 +15,12 @@ public class OrderedItem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@ManyToOne
-	private Product product;
 	
-	private int quantity;
+	private String productName;
+	
+	private int productPrice;
+	
+	private float quantity;
 	
 	@ManyToOne
 	@JsonBackReference
@@ -32,19 +34,28 @@ public class OrderedItem {
 		this.id = id;
 	}
 
-	public Product getProduct() {
-		return product;
+	
+	public String getProductName() {
+		return productName;
 	}
 
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
-	public int getQuantity() {
+	public int getProductPrice() {
+		return productPrice;
+	}
+
+	public void setProductPrice(int productPrice) {
+		this.productPrice = productPrice;
+	}
+
+	public float getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(float quantity) {
 		this.quantity = quantity;
 	}
 

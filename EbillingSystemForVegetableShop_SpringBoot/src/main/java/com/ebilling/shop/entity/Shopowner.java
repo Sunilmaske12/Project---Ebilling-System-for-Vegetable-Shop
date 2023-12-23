@@ -1,10 +1,13 @@
 package com.ebilling.shop.entity;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,6 +25,7 @@ public class Shopowner {
 	
 	private String mobNo;
 	
+	@Column(name="email", nullable = false, unique = true)
 	private String email;
 	
 	private String password;
@@ -35,6 +39,8 @@ public class Shopowner {
 	@OneToMany(mappedBy = "shopowner", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<Product> product;
+	
+	private String date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 
 	public int getId() {
 		return id;
@@ -99,6 +105,12 @@ public class Shopowner {
 	public void setProduct(List<Product> product) {
 		this.product = product;
 	}
+	
+	public String getDate() {
+		return this.date;
+	}
+	
+	
 
 
 	@Override

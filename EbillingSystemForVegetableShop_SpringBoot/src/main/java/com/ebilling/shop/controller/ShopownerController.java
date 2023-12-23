@@ -24,8 +24,7 @@ public class ShopownerController {
 	@Autowired
 	private ShopOwnerRepository shopownerRepo;
 	
-	//testing
-	
+		
 	//get all shopowner
 	@GetMapping("/getAllShopowner")
 	public List<Shopowner> getAllShopOwner(){
@@ -81,6 +80,14 @@ public class ShopownerController {
 		else {
 			throw new ResourceNotFoundException("Shoponer id is not found "+id);
 		}
+	}
+	
+	@GetMapping("/shop/{email}")
+	public boolean isEmailPresent(@PathVariable("email") String email) {
+		if(shopownerRepo.findByEmail(email)!=null) {
+			return true;
+		}
+		return false;
 	}
 	
 

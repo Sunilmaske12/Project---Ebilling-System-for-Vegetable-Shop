@@ -1,11 +1,14 @@
 package com.ebilling.shop.entity;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,6 +27,7 @@ public class Customer {
 	
 	private String mobNo;
 	
+	@Column(unique = true)
 	private String email;
 	
 	private String password;
@@ -31,6 +35,8 @@ public class Customer {
 	private String address;
 	
 	private long amtBalance;
+	
+	private String date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
 		
 	@ManyToOne
 	@JsonBackReference
@@ -102,6 +108,10 @@ public class Customer {
 
 	public void setAmtBalance(long amtBalance) {
 		this.amtBalance = amtBalance;
+	}
+	
+	public String getDate() {
+		return date;
 	}
 
 }

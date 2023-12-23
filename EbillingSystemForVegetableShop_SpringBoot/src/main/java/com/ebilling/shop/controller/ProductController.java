@@ -53,7 +53,7 @@ public class ProductController {
 	@Autowired
 	private ObjectMapper mapper;
 	
-	String mainPath ="C:\\Users\\maske\\git\\Project---Ebilling-System-for-Vegetable-Shop\\EbillingSystemForVegetableShop_SpringBoot\\src\\main\\resources\\static\\";
+	String mainPath ="D:\\STS_Work\\backend-images\\";
 	
 	
 	
@@ -108,7 +108,7 @@ public class ProductController {
 			
 			//saving image to folder
 			InputStream is=file.getInputStream();
-			Path path = Paths.get(mainPath+"productImages"+File.separator+file.getOriginalFilename());
+			Path path = Paths.get(mainPath+"VMS"+File.separator+file.getOriginalFilename());
 				
 			Files.copy(is, path, StandardCopyOption.REPLACE_EXISTING);
 		}
@@ -118,14 +118,20 @@ public class ProductController {
 	
 	
 	//update product
-	@PutMapping("/updateProduct")
-	public Product updateProduct(@RequestBody Product product) {
+	@PutMapping("/{sid}/updateProduct")
+	public Product updateProduct(@RequestBody Product product, @PathVariable("sid") int sid) {
+		Optional<Shopowner> optionalShop = shopRepo.findById(sid);
+		System.out.println("hello");
+		if(!optionalShop.isEmpty()) {
+			product.setShopowner(optionalShop.get());
+		}
 		return prodRepo.save(product);
 	}
 	
 	//delete product
 	@DeleteMapping("/deleteProduct/{id}")
 	public String deleteProduct(@PathVariable("id") int id) {
+		System.out.println(id);
 	Optional<Product> product = prodRepo.findById(id);
 		if(product.isPresent()) {
 			prodRepo.delete(product.get());
@@ -144,7 +150,7 @@ public class ProductController {
 		if(product.isPresent()) {
 			String imageName = product.get().getImageName();
 			if(imageName!=null) {
-				String fullPath = mainPath+"productImages"+File.separator+imageName;
+				String fullPath = mainPath+"VMS"+File.separator+imageName;
 				InputStream is = new FileInputStream(fullPath);
 				res.setContentType(MediaType.IMAGE_JPEG_VALUE);
 				StreamUtils.copy(is, res.getOutputStream());

@@ -11,4 +11,6 @@ public interface ShopOwnerRepository extends JpaRepository<Shopowner, Integer> {
 
 	List<Shopowner> findAllByName(String name);
 
+	Shopowner findByEmail(String email);
+
 }
